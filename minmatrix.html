@@ -1,0 +1,40 @@
+<html>
+  <head>
+    <script src="./minMatrix.js"></script>
+  </head>
+  <body>
+    <script>
+
+      
+      const matrix = new matIV()
+      const identity = matrix.identity(matrix.create())
+      const ret = matrix.identity(matrix.create())
+      console.log(identity)
+
+      matrix.translate(identity, [1.0, 0.0, 0.0], ret)
+      console.log(ret)
+
+
+      const mMatrix = matrix.identity(matrix.create());
+      const vMatrix = matrix.identity(matrix.create());
+      const pMatrix = matrix.identity(matrix.create());
+      const mvpMatrix = matrix.identity(matrix.create());
+
+      
+// ビュー座標変換行列
+      matrix.lookAt([0.0, 1.0, 3.0], [0, 0, 0], [0, 1, 0], vMatrix);
+      console.log('vMatrix')
+      console.log(vMatrix)
+
+      // プロジェクション座標変換行列
+      matrix.perspective(90, 500 / 500, 0.1, 100, pMatrix);
+      console.log('pMatrix')
+      console.log(pMatrix)
+
+      matrix.multiply(pMatrix, vMatrix, mvpMatrix)
+      console.log(mvpMatrix)
+      matrix.multiply(mvpMatrix, mMatrix, mvpMatrix)
+      console.log(mvpMatrix)      
+    </script>
+  </body>
+</html>

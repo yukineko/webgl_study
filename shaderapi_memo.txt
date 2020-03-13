@@ -1,0 +1,20 @@
+shaderつくる
+
+1. gl.createShader(arg) //arg  gl.VERTEX_SHADER or gl.FRAGMENT_SHADER
+2. gl.shaderSource(shader(1), code)
+3. gl.compileShader(shader)
+4. gl.getShaderParameter(shader, gl.COMPILE_STATUS) // trueなら成功
+4.1 gl.getShaderInfoLog(shader) // error時のcompile log
+
+
+これをそれぞれVERTEX, FRAGMENTのshaderでつくる
+
+
+programつくる
+
+1. gl.createProgram()
+2. gl.attcchShader(program, shader) // VERTEX, FRGMENTそれぞれにする
+3. gl.linkProgram() // linkしてprogram生成する
+4. gl.getProgramParameter(program, gl.LINK_STATUS) // link結果を取得する
+4.1 gl.getProgramInfo(program) // programのエラー情報を得る
+5 
