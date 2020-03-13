@@ -17,4 +17,5 @@ programつくる
 3. gl.linkProgram() // linkしてprogram生成する
 4. gl.getProgramParameter(program, gl.LINK_STATUS) // link結果を取得する
 4.1 gl.getProgramInfo(program) // programのエラー情報を得る
-5 
+5 gl.useProgram()
+
