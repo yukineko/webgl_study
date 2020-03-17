@@ -105,7 +105,6 @@ const create_ibo = (gl, data) => {
 
 
 const set_attributes = (gl, vbos, attrLocations, attrStrides) => {
-
     for(let i in vbos){
         gl.bindBuffer(gl.ARRAY_BUFFER, vbos[i])
         gl.enableVertexAttribArray(attrLocations[i])
