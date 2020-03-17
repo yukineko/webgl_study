@@ -61,7 +61,6 @@ onload = function(){
     uniLocation[0] = gl.getUniformLocation(prg, 'mvpMatrix')
     uniLocation[1] = gl.getUniformLocation(prg, 'texture')
 
-    gl.activeTexture(gl.TEXRURED)
 
 
     var m = new matIV();
@@ -94,17 +93,25 @@ onload = function(){
 
 
     let loop = () => {
-        gl.clearColor(0.0 ,0.0 ,0.0 ,1.0 )
-        gl.clearDepth(1.0)
-        gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPHTH_BUFFER_BIT)
+
+		// canvasを初期化
+		gl.clearColor(0.0, 0.0, 0.0, 1.0);
+		gl.clearDepth(1.0);
+		gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
 
         count++
 
-        let rad = (count % 360) * Math.PI / 180
+		// var rad = (count % 360) * Math.PI / 180;
+		
+		// // テクスチャをバインドする
+		// gl.bindTexture(gl.TEXTURE_2D, texture);
+		
+		// // uniform変数にテクスチャを登録
+		// gl.uniform1i(uniLocation[1], 0);
+        var rad = (count % 360) * Math.PI / 180
 
-        gl.bindTexture(gl.TEXRURE_2D, texture)
-
-        gl.uniform1i(uniLocation[1], 0)
+        gl.bindTexture(gl.TEXTURE_2D, texture)
+        gl.uniform1i(uniLocation[1], 0)  
 
         m.identity(mMatrix)
         m.rotate(mMatrix, rad, [0, 1, 0], mMatrix)
