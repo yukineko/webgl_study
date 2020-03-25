@@ -3,8 +3,33 @@ import {torus, torus2, hsva} from './torus.js'
 import {sphere} from './sphere.js'
 
 
+function mousemove(event){
+
+}
+
+
 onload = function(){
+    const q = new qtnIV();;
+    const qt = q.identity(q.create())
     const c = get_canvas('canvas', 300, 300);
+    c.addEventListener('mousemove', function(event){ 
+        const cw = c.width
+        const ch = c.height
+        const wh = 1 / Math.sqrt(cw * cw + ch * ch)
+        let x = event.clientX - c.offsetLeft - cw * 0.5
+        let y = event.clientY - c.offsetTop - ch * 0.5
+        let sq = Math.sqrt(x * x + y * y)
+        const r = sq * 2 * Math.PI * wh
+        if(sq != 1){
+            sq = 1 / sq
+            x *= sq
+            y *= sq
+        }
+        console.log(r)
+        q.rotate(r, [y, x, 0.0], qt)
+//        console.log(qt)
+    }, false)
+    
     const gl = get_gl(c)
 
     const prg = get_program(gl, 'vs', 'fs')
@@ -29,7 +54,8 @@ onload = function(){
     const vColor = create_vbo(gl, torusData.color)
     const vIndex = create_ibo(gl, torusData.index)
     const vVBOList = [vPosition, vNormal, vColor]
-    
+
+
     set_attributes(gl, vVBOList, attLocation, attStride)
     gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, vIndex)
 
@@ -50,9 +76,6 @@ onload = function(){
     const invMatrix = m.identity(m.create());    
 
     
-    const q = new qtnIV()
-    const xQuatanion = q.identity(q.create())
-    console.log(xQuatanion)
 
     const lightPosition = [15.0, 10.0, 15.0]
     const ambientColor = [0.1, 0.1, 0.1, 1.0]
@@ -60,6 +83,10 @@ onload = function(){
     const cameraUpDirection = [0.0, 1.0, 0.0]
     
     let count = 0
+    m.lookAt(cameraPosition, [0, 0, 0], cameraUpDirection, vMatrix);
+    m.perspective(45, c.width / c.height, 0.1, 100, pMatrix);
+    m.multiply(pMatrix, vMatrix, tmpMatrix);
+    
     gl.enable(gl.DEPTH_TEST);
     gl.depthFunc(gl.LEQUAL);
     gl.enable(gl.CULL_FACE)
@@ -71,19 +98,14 @@ onload = function(){
 	
 	count++;
 	let rad = (count % 180) * Math.PI / 90;
-        let rad2 = (count % 720) * Math.PI / 360;
         // #1
-        q.rotate(rad2, [1,0,0], xQuatanion)
-        q.toVecIII([0.0, 0.0, 10.0], xQuatanion, cameraPosition)
-        q.toVecIII([0.0, 1.0, 0.0], xQuatanion, cameraUpDirection);
-
-        m.lookAt(cameraPosition, [0,0,0], cameraUpDirection, vMatrix)
-        m.perspective(45, c.width / c.height, 0.1, 100, pMatrix)
-        m.multiply(pMatrix, vMatrix, tmpMatrix)
+        const qMatrix = m.identity(m.create())
+        q.toMatIV(qt, qMatrix)
         
 	m.identity(mMatrix);
+	m.multiply(mMatrix, qMatrix, mMatrix);
 	m.rotate(mMatrix, rad, [0, 1, 0], mMatrix);
-	m.multiply(tmpMatrix, mMatrix, mvpMatrix);
+        m.multiply(tmpMatrix, mMatrix, mvpMatrix)
         m.inverse(mMatrix, invMatrix)
 	
 	gl.uniformMatrix4fv(uniLocations[0], false, mvpMatrix);
